@@ -18,7 +18,7 @@ export default function Home() {
                 Swachh
               </h1>
               <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-                Empowering citizens to report, track, and resolve community issues together.
+                Report, vote, and track civic issues in your community.
               </p>
             </div>
 
@@ -66,17 +66,17 @@ export default function Home() {
             <Feature
               icon={<MapPin className="h-6 w-6 text-primary" />}
               title="Report Issues"
-              description="Easily report civic issues like potholes, broken streetlights, and more with location details and photos."
+              description="Report civic issues with photos and location details."
             />
             <Feature
               icon={<ThumbsUp className="h-6 w-6 text-primary" />}
               title="Vote on Priorities"
-              description="Vote on issues that matter most to your community to help prioritize resolution efforts."
+              description="Vote on issues to help prioritize community needs."
             />
             <Feature
               icon={<CheckCircle className="h-6 w-6 text-primary" />}
               title="Track Progress"
-              description="Follow the status of reported issues from pending to resolved and see real-time updates."
+              description="Monitor issue status from pending to resolved."
             />
           </div>
         </div>
@@ -88,10 +88,10 @@ export default function Home() {
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
-                  Join Your Community Today
+                  Join Your Community
                 </h2>
                 <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl">
-                  Be part of the solution. Register now to start reporting and voting on issues in your area.
+                  Start reporting and voting on issues in your area.
                 </p>
               </div>
               <Link href="/auth/register">
