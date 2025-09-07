@@ -40,7 +40,7 @@ function LocationMarker({
         const res = await fetch(
           `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`,
           {
-            headers: { "User-Agent": "CivicSync/1.0" },
+            headers: { "User-Agent": "Swachh/1.0" },
           }
         )
         const data = await res.json()

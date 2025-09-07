@@ -12,7 +12,7 @@ import { Toaster } from "@/components/ui/sonner"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "CivicSync - Citizen-Issue Reporting & Voting Platform",
+  title: "Swachh - Citizen-Issue Reporting & Voting Platform",
   description: "Report and vote on civic issues in your community",
   icons:{
     icon: "logo.png",
@@ -36,7 +36,7 @@ export default function RootLayout({
               <main className="flex-1">{children}</main>
               <footer className="py-6 border-t">
                 <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-                  © {new Date().getFullYear()} CivicSync. All rights reserved.
+                  © {new Date().getFullYear()} Swachh. All rights reserved.
                 </div>
               </footer>
             </div>
