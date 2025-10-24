@@ -62,7 +62,7 @@ export default function Navbar() {
         <Link href="/" className="flex items-center space-x-2 group">
           <ShieldCheck className="h-8 w-8 text-blue-600 group-hover:text-blue-800 transition duration-300" />
           <span className="text-2xl font-extrabold bg-gradient-to-r from-blue-600 via-cyan-400 to-blue-600 text-transparent bg-clip-text transition duration-300 drop-shadow-sm group-hover:drop-shadow-lg">
-            CivicSync
+            Swachh
           </span>
 
         </Link>
