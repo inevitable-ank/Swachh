@@ -55,8 +55,8 @@ export async function GET() {
     return NextResponse.json({
       totalIssues,
       totalVotes,
-      points: user.points,
-      badges: user.badges,
+      points: user.points || 0,
+      badges: user.badges || [],
       rank,
       issuesResolved,
       recentActivity

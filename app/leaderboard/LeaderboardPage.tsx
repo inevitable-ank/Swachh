@@ -133,7 +133,7 @@ export default function LeaderboardPage() {
                     <span className="text-sm text-muted-foreground">pts</span>
                   </div>
                   <div className="flex justify-center gap-1 mt-2">
-                    {leaderboard[1].badges.slice(0, 3).map((badge, index) => (
+                    {(leaderboard[1].badges || []).slice(0, 3).map((badge, index) => (
                       <Badge key={index} variant="secondary" className="text-xs">
                         {badge}
                       </Badge>
@@ -168,7 +168,7 @@ export default function LeaderboardPage() {
                     <span className="text-sm text-muted-foreground">pts</span>
                   </div>
                   <div className="flex justify-center gap-1 mt-2">
-                    {leaderboard[0].badges.slice(0, 3).map((badge, index) => (
+                    {(leaderboard[0].badges || []).slice(0, 3).map((badge, index) => (
                       <Badge key={index} className="text-xs bg-yellow-200 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-200">
                         {badge}
                       </Badge>
@@ -203,7 +203,7 @@ export default function LeaderboardPage() {
                     <span className="text-sm text-muted-foreground">pts</span>
                   </div>
                   <div className="flex justify-center gap-1 mt-2">
-                    {leaderboard[2].badges.slice(0, 3).map((badge, index) => (
+                    {(leaderboard[2].badges || []).slice(0, 3).map((badge, index) => (
                       <Badge key={index} variant="secondary" className="text-xs">
                         {badge}
                       </Badge>
@@ -287,14 +287,14 @@ export default function LeaderboardPage() {
                         <span className="text-sm text-muted-foreground">pts</span>
                       </div>
                       <div className="flex gap-1 mt-1">
-                        {user.badges.slice(0, 2).map((badge, badgeIndex) => (
+                        {(user.badges || []).slice(0, 2).map((badge, badgeIndex) => (
                           <Badge key={badgeIndex} variant="secondary" className="text-xs">
                             {badge}
                           </Badge>
                         ))}
-                        {user.badges.length > 2 && (
+                        {(user.badges || []).length > 2 && (
                           <Badge variant="outline" className="text-xs">
-                            +{user.badges.length - 2}
+                            +{(user.badges || []).length - 2}
                           </Badge>
                         )}
                       </div>

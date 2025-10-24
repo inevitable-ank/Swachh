@@ -226,9 +226,9 @@ export default function ProfilePage() {
             </p>
           </CardHeader>
           <CardContent>
-            {stats?.badges && stats.badges.length > 0 ? (
+            {stats?.badges && (stats.badges || []).length > 0 ? (
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {stats.badges.map((badge, index) => {
+                {(stats.badges || []).map((badge, index) => {
                   const config = badgeConfig[badge as keyof typeof badgeConfig]
                   return (
                     <motion.div

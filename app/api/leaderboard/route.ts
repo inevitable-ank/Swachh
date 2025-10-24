@@ -31,8 +31,8 @@ export async function GET() {
           id: user._id.toString(),
           name: user.name,
           email: user.email,
-          points: user.points,
-          badges: user.badges,
+          points: user.points || 0,
+          badges: user.badges || [],
           totalIssues,
           totalVotes,
           rank: index + 1
