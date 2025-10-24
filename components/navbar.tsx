@@ -12,16 +12,51 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useAuth } from "@/hooks/use-auth"
-import { BarChart2, LogOut, Map, Menu, Plus, ShieldCheck, User, Star, Trophy, Award } from "lucide-react"
+import { BarChart2, LogOut, Map, Menu, Plus, ShieldCheck, User, Star, Trophy, Award, RefreshCw } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { FaGithub } from "react-icons/fa"
 
 export default function Navbar() {
   const pathname = usePathname()
-  const { user, signOut } = useAuth()
+  const { user, signOut, refreshUser } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
+  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [userPoints, setUserPoints] = useState(0)
+  const [isLoadingPoints, setIsLoadingPoints] = useState(false)
+
+  // Fetch user points from database
+  const fetchUserPoints = async () => {
+    if (!user?.id) return
+    
+    setIsLoadingPoints(true)
+    try {
+      const response = await fetch("/api/user/stats")
+      if (response.ok) {
+        const data = await response.json()
+        setUserPoints(data.points || 0)
+      }
+    } catch (error) {
+      console.error("Error fetching user points:", error)
+    } finally {
+      setIsLoadingPoints(false)
+    }
+  }
+
+  // Load points when user is available
+  useEffect(() => {
+    if (user?.id) {
+      fetchUserPoints()
+    }
+  }, [user?.id])
+
+  // Refresh points when pathname changes (in case user created an issue)
+  useEffect(() => {
+    if (user?.id && pathname) {
+      fetchUserPoints()
+    }
+  }, [pathname, user?.id])
 
   const routes = [
     {
@@ -114,8 +149,20 @@ export default function Navbar() {
                 <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border border-yellow-200 dark:border-yellow-800">
                   <Star className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
                   <span className="text-sm font-semibold text-yellow-700 dark:text-yellow-300">
-                    {user.points || 0} pts
+                    {isLoadingPoints ? "..." : `${userPoints} pts`}
                   </span>
+                  <button
+                    onClick={async () => {
+                      setIsRefreshing(true)
+                      await fetchUserPoints()
+                      setTimeout(() => setIsRefreshing(false), 1000)
+                    }}
+                    disabled={isRefreshing || isLoadingPoints}
+                    className="ml-1 p-1 hover:bg-yellow-200 dark:hover:bg-yellow-800 rounded transition-colors"
+                    title="Refresh points"
+                  >
+                    <RefreshCw className={`h-3 w-3 text-yellow-600 dark:text-yellow-400 ${isRefreshing ? 'animate-spin' : ''}`} />
+                  </button>
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -135,7 +182,7 @@ export default function Navbar() {
                     <DropdownMenuLabel className="flex items-center gap-2">
                       <div className="flex items-center gap-2">
                         <Star className="h-4 w-4 text-yellow-600" />
-                        <span>{user.points || 0} points</span>
+                        <span>{userPoints} points</span>
                       </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />

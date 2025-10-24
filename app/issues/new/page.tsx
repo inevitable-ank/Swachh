@@ -137,8 +137,7 @@ export default function NewIssuePage() {
         throw new Error(data?.error || "Something went wrong. Try again later.")
       }
 
-      toast.success("Your issue has been successfully submitted."
-      )
+      toast.success("Your issue has been successfully submitted! +10 points earned! 🎉")
 
       router.push("/my-issues")
     } catch (error: any) {

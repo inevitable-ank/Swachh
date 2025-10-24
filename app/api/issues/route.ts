@@ -5,6 +5,7 @@ import Vote from "@/models/Vote";
 import User from "@/models/User";
 import { auth } from "@/lib/auth";
 import { issueRateLimited } from "@/lib/rate-limit";
+import mongoose from "mongoose";
 
 // Get all issues with vote counts
 export async function GET(request: Request) {
@@ -156,21 +157,23 @@ export async function POST(request: Request) {
     await Issue.populate(issue, { path: "createdBy", select: "name email" });
 
     // Award points for creating an issue
-    await User.findByIdAndUpdate(session.user.id, {
+    console.log("Awarding points to user:", session.user.id);
+    const updatedUser = await User.findByIdAndUpdate(new mongoose.Types.ObjectId(session.user.id), {
       $inc: { points: 10 }
-    });
+    }, { new: true });
+    console.log("Updated user points:", updatedUser?.points);
 
     // Check for "First Issue" badge
     const userIssues = await Issue.countDocuments({ createdBy: session.user.id });
     if (userIssues === 1) {
-      await User.findByIdAndUpdate(session.user.id, {
+      await User.findByIdAndUpdate(new mongoose.Types.ObjectId(session.user.id), {
         $addToSet: { badges: "First Issue" }
       });
     }
 
     // Check for "Issue Hunter" badge (5+ issues)
     if (userIssues === 5) {
-      await User.findByIdAndUpdate(session.user.id, {
+      await User.findByIdAndUpdate(new mongoose.Types.ObjectId(session.user.id), {
         $addToSet: { badges: "Issue Hunter" }
       });
     }
