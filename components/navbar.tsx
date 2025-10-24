@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useAuth } from "@/hooks/use-auth"
-import { BarChart2, LogOut, Map, Menu, Plus, ShieldCheck, User, Star, Trophy, Award, RefreshCw } from "lucide-react"
+import { BarChart2, LogOut, Map, Menu, Plus, ShieldCheck, User, Star, Trophy, Award } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
@@ -22,7 +22,6 @@ export default function Navbar() {
   const pathname = usePathname()
   const { user, signOut, refreshUser } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
-  const [isRefreshing, setIsRefreshing] = useState(false)
   const [userPoints, setUserPoints] = useState(0)
   const [isLoadingPoints, setIsLoadingPoints] = useState(false)
 
@@ -151,18 +150,6 @@ export default function Navbar() {
                   <span className="text-sm font-semibold text-yellow-700 dark:text-yellow-300">
                     {isLoadingPoints ? "..." : `${userPoints} pts`}
                   </span>
-                  <button
-                    onClick={async () => {
-                      setIsRefreshing(true)
-                      await fetchUserPoints()
-                      setTimeout(() => setIsRefreshing(false), 1000)
-                    }}
-                    disabled={isRefreshing || isLoadingPoints}
-                    className="ml-1 p-1 hover:bg-yellow-200 dark:hover:bg-yellow-800 rounded transition-colors"
-                    title="Refresh points"
-                  >
-                    <RefreshCw className={`h-3 w-3 text-yellow-600 dark:text-yellow-400 ${isRefreshing ? 'animate-spin' : ''}`} />
-                  </button>
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
