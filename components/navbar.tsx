@@ -62,7 +62,7 @@ export default function Navbar() {
         <Link href="/" className="flex items-center space-x-2 group">
           <ShieldCheck className="h-8 w-8 text-blue-600 group-hover:text-blue-800 transition duration-300" />
           <span className="text-2xl font-extrabold bg-gradient-to-r from-blue-600 via-cyan-400 to-blue-600 text-transparent bg-clip-text transition duration-300 drop-shadow-sm group-hover:drop-shadow-lg">
-            Swachh
+            CivicSync
           </span>
 
         </Link>
@@ -82,7 +82,7 @@ export default function Navbar() {
           </nav>
           <div className="flex items-center space-x-4">
             <Link
-              href="https://github.com/inevitable-ank/Swachh"
+              href="https://github.com/RHL-RWT-01/CivicSync1"
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-primary"
@@ -181,7 +181,7 @@ export default function Navbar() {
                 ))}
                 <div className="flex items-center justify-start gap-4 py-2">
                   <Link
-                    href="https://github.com/inevitable-ank/Swachh"
+                    href="https://github.com/RHL-RWT-01/CivicSync1"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-muted-foreground hover:text-primary"

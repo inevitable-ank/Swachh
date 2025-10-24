@@ -15,10 +15,10 @@ export default function Home() {
           <div className="flex flex-col items-center space-y-4 text-center">
             <div className="space-y-2">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
-                Swachh
+                CivicSync
               </h1>
               <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-                Report, vote, and track civic issues in your community.
+                Empowering citizens to report, track, and resolve community issues together.
               </p>
             </div>
 
@@ -66,17 +66,17 @@ export default function Home() {
             <Feature
               icon={<MapPin className="h-6 w-6 text-primary" />}
               title="Report Issues"
-              description="Report civic issues with photos and location details."
+              description="Easily report civic issues like potholes, broken streetlights, and more with location details and photos."
             />
             <Feature
               icon={<ThumbsUp className="h-6 w-6 text-primary" />}
               title="Vote on Priorities"
-              description="Vote on issues to help prioritize community needs."
+              description="Vote on issues that matter most to your community to help prioritize resolution efforts."
             />
             <Feature
               icon={<CheckCircle className="h-6 w-6 text-primary" />}
               title="Track Progress"
-              description="Monitor issue status from pending to resolved."
+              description="Follow the status of reported issues from pending to resolved and see real-time updates."
             />
           </div>
         </div>
@@ -88,10 +88,10 @@ export default function Home() {
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
-                  Join Your Community
+                  Join Your Community Today
                 </h2>
                 <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl">
-                  Start reporting and voting on issues in your area.
+                  Be part of the solution. Register now to start reporting and voting on issues in your area.
                 </p>
               </div>
               <Link href="/auth/register">
