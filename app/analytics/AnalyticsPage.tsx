@@ -16,6 +16,12 @@ interface AnalyticsData {
   totalIssues: number
   totalVotes: number
   openIssues: number
+  trends: {
+    issuesTrend: number
+    votesTrend: number
+    resolutionTrend: number
+    responseTimes: Record<string, number>
+  }
 }
 
 export default function AnalyticsPage() {
@@ -107,17 +113,17 @@ export default function AnalyticsPage() {
             <StatCard
               title="Total Issues"
               value={data.totalIssues}
-              change="+12% from last month"
+              change={`${data.trends.issuesTrend >= 0 ? '+' : ''}${data.trends.issuesTrend}% from last month`}
               icon={ListTodo}
-              trend="up"
+              trend={data.trends.issuesTrend >= 0 ? "up" : "down"}
               delay={0}
             />
             <StatCard
               title="Community Votes"
               value={data.totalVotes}
-              change="+8% engagement"
+              change={`${data.trends.votesTrend >= 0 ? '+' : ''}${data.trends.votesTrend}% engagement`}
               icon={ThumbsUp}
-              trend="up"
+              trend={data.trends.votesTrend >= 0 ? "up" : "down"}
               delay={0.1}
             />
             <StatCard
@@ -131,9 +137,9 @@ export default function AnalyticsPage() {
             <StatCard
               title="Resolution Rate"
               value={`${Math.round(((data.totalIssues - data.openIssues) / data.totalIssues) * 100)}%`}
-              change="+5% this week"
+              change={`${data.trends.resolutionTrend >= 0 ? '+' : ''}${data.trends.resolutionTrend}% this week`}
               icon={Target}
-              trend="up"
+              trend={data.trends.resolutionTrend >= 0 ? "up" : "down"}
               delay={0.3}
             />
           </div>
@@ -240,15 +246,21 @@ export default function AnalyticsPage() {
                     <CardContent className="space-y-4">
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-muted-foreground">Issue Reports</span>
-                        <span className="font-semibold text-success">+12%</span>
+                        <span className={`font-semibold ${data.trends.issuesTrend >= 0 ? 'text-success' : 'text-destructive'}`}>
+                          {data.trends.issuesTrend >= 0 ? '+' : ''}{data.trends.issuesTrend}%
+                        </span>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-muted-foreground">Community Votes</span>
-                        <span className="font-semibold text-success">+8%</span>
+                        <span className={`font-semibold ${data.trends.votesTrend >= 0 ? 'text-success' : 'text-destructive'}`}>
+                          {data.trends.votesTrend >= 0 ? '+' : ''}{data.trends.votesTrend}%
+                        </span>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-muted-foreground">Resolution Rate</span>
-                        <span className="font-semibold text-success">+5%</span>
+                        <span className={`font-semibold ${data.trends.resolutionTrend >= 0 ? 'text-success' : 'text-destructive'}`}>
+                          {data.trends.resolutionTrend >= 0 ? '+' : ''}{data.trends.resolutionTrend}%
+                        </span>
                       </div>
                     </CardContent>
                   </Card>
@@ -262,18 +274,17 @@ export default function AnalyticsPage() {
                       <CardDescription>Average time to resolution</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-muted-foreground">Road Issues</span>
-                        <span className="font-semibold">2.3 days</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-muted-foreground">Water Issues</span>
-                        <span className="font-semibold">1.8 days</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-muted-foreground">Sanitation</span>
-                        <span className="font-semibold">3.1 days</span>
-                      </div>
+                      {Object.entries(data.trends.responseTimes).map(([category, time]) => (
+                        <div key={category} className="flex items-center justify-between">
+                          <span className="text-sm text-muted-foreground">{category} Issues</span>
+                          <span className="font-semibold">{time} days</span>
+                        </div>
+                      ))}
+                      {Object.keys(data.trends.responseTimes).length === 0 && (
+                        <div className="text-center py-4">
+                          <span className="text-sm text-muted-foreground">No resolved issues yet</span>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 </div>
