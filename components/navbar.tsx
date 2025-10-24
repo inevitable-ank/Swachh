@@ -12,16 +12,50 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useAuth } from "@/hooks/use-auth"
-import { BarChart2, LogOut, Map, Menu, Plus, ShieldCheck, User } from "lucide-react"
+import { BarChart2, LogOut, Map, Menu, Plus, ShieldCheck, User, Star, Trophy, Award, AlertTriangle } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { FaGithub } from "react-icons/fa"
 
 export default function Navbar() {
   const pathname = usePathname()
-  const { user, signOut } = useAuth()
+  const { user, signOut, refreshUser } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
+  const [userPoints, setUserPoints] = useState(0)
+  const [isLoadingPoints, setIsLoadingPoints] = useState(false)
+
+  // Fetch user points from database
+  const fetchUserPoints = async () => {
+    if (!user?.id) return
+    
+    setIsLoadingPoints(true)
+    try {
+      const response = await fetch("/api/user/stats")
+      if (response.ok) {
+        const data = await response.json()
+        setUserPoints(data.points || 0)
+      }
+    } catch (error) {
+      console.error("Error fetching user points:", error)
+    } finally {
+      setIsLoadingPoints(false)
+    }
+  }
+
+  // Load points when user is available
+  useEffect(() => {
+    if (user?.id) {
+      fetchUserPoints()
+    }
+  }, [user?.id])
+
+  // Refresh points when pathname changes (in case user created an issue)
+  useEffect(() => {
+    if (user?.id && pathname) {
+      fetchUserPoints()
+    }
+  }, [pathname, user?.id])
 
   const routes = [
     {
@@ -38,6 +72,11 @@ export default function Navbar() {
       href: "/analytics",
       label: "Analytics",
       active: pathname === "/analytics",
+    },
+    {
+      href: "/leaderboard",
+      label: "Leaderboard",
+      active: pathname === "/leaderboard",
     },
   ]
 
@@ -62,7 +101,7 @@ export default function Navbar() {
         <Link href="/" className="flex items-center space-x-2 group">
           <ShieldCheck className="h-8 w-8 text-blue-600 group-hover:text-blue-800 transition duration-300" />
           <span className="text-2xl font-extrabold bg-gradient-to-r from-blue-600 via-cyan-400 to-blue-600 text-transparent bg-clip-text transition duration-300 drop-shadow-sm group-hover:drop-shadow-lg">
-            CivicSync
+            Swachh
           </span>
 
         </Link>
@@ -105,6 +144,13 @@ export default function Navbar() {
                     </Button>
                   </Link>
                 ))}
+                {/* User Points Display */}
+                <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border border-yellow-200 dark:border-yellow-800">
+                  <Star className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
+                  <span className="text-sm font-semibold text-yellow-700 dark:text-yellow-300">
+                    {isLoadingPoints ? "..." : `${userPoints} pts`}
+                  </span>
+                </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
@@ -120,16 +166,31 @@ export default function Navbar() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuLabel className="flex items-center gap-2">
+                      <div className="flex items-center gap-2">
+                        <Star className="h-4 w-4 text-yellow-600" />
+                        <span>{userPoints} points</span>
+                      </div>
+                    </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
+                      <Link href="/profile" className="cursor-pointer">
+                        <User className="mr-2 h-4 w-4" /> My Profile
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
                       <Link href="/my-issues" className="cursor-pointer">
-                        <User className="mr-2 h-4 w-4" /> My Issues
+                        <AlertTriangle className="mr-2 h-4 w-4" /> My Issues
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link href="/analytics" className="cursor-pointer">
                         <BarChart2 className="mr-2 h-4 w-4" /> Analytics
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/leaderboard" className="cursor-pointer">
+                        <Trophy className="mr-2 h-4 w-4" /> Leaderboard
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>

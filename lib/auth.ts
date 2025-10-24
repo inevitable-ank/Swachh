@@ -11,6 +11,8 @@ declare module "next-auth" {
       name?: string | null
       email?: string | null
       image?: string | null
+      points?: number
+      badges?: string[]
     }
   }
 }
@@ -46,6 +48,8 @@ export const authOptions: NextAuthOptions = {
           id: user._id.toString(),
           email: user.email,
           name: user.name,
+          points: user.points,
+          badges: user.badges,
         }
       },
     }),
@@ -57,12 +61,16 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
+        token.points = user.points
+        token.badges = user.badges
       }
       return token
     },
     async session({ session, token }) {
       if (token && session.user) {
         session.user.id = token.id as string
+        session.user.points = token.points as number
+        session.user.badges = token.badges as string[]
       }
       return session
     },

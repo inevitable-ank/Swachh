@@ -92,11 +92,24 @@ export const useAuth = () => {
     router.refresh()
   }
 
+  const refreshUser = async () => {
+    try {
+      const response = await fetch("/api/user/refresh")
+      if (response.ok) {
+        // Force a session refresh by reloading the page
+        router.refresh()
+      }
+    } catch (error) {
+      console.error("Error refreshing user:", error)
+    }
+  }
+
   return {
     user,
     loading,
     signIn,
     signUp,
     signOut,
+    refreshUser,
   }
 }

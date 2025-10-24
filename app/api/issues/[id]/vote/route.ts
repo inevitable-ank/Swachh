@@ -2,7 +2,9 @@ import { NextResponse } from "next/server"
 import dbConnect from "@/lib/db"
 import Issue from "@/models/Issue"
 import Vote from "@/models/Vote"
+import User from "@/models/User"
 import { auth } from "@/lib/auth"
+import mongoose from "mongoose"
 
 // Vote on an issue
 export async function POST(request: Request, { params }: { params: { id: string } }) {
@@ -36,6 +38,24 @@ export async function POST(request: Request, { params }: { params: { id: string 
       issue: issue._id,
       user: session.user.id,
     })
+
+    // Award points for voting
+    await User.findByIdAndUpdate(new mongoose.Types.ObjectId(session.user.id), {
+      $inc: { points: 5 }
+    });
+
+    // Check for voting badges
+    const userVotes = await Vote.countDocuments({ user: session.user.id });
+    if (userVotes === 10) {
+      await User.findByIdAndUpdate(new mongoose.Types.ObjectId(session.user.id), {
+        $addToSet: { badges: "Community Helper" }
+      });
+    }
+    if (userVotes === 25) {
+      await User.findByIdAndUpdate(new mongoose.Types.ObjectId(session.user.id), {
+        $addToSet: { badges: "Voting Master" }
+      });
+    }
 
     // Get updated vote count
     const voteCount = await Vote.countDocuments({ issue: issue._id })
