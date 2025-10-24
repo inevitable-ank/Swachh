@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useAuth } from "@/hooks/use-auth"
-import { BarChart2, LogOut, Map, Menu, Plus, ShieldCheck, User, Star, Trophy, Award } from "lucide-react"
+import { BarChart2, LogOut, Map, Menu, Plus, ShieldCheck, User, Star, Trophy, Award, AlertTriangle } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
@@ -180,7 +180,7 @@ export default function Navbar() {
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link href="/my-issues" className="cursor-pointer">
-                        <User className="mr-2 h-4 w-4" /> My Issues
+                        <AlertTriangle className="mr-2 h-4 w-4" /> My Issues
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
