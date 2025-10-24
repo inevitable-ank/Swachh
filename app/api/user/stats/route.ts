@@ -22,12 +22,45 @@ export async function GET() {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
-    // Get user's issues
+    // Get user's issues and votes to calculate correct points
     const userIssues = await Issue.find({ createdBy: session.user.id })
-    const totalIssues = userIssues.length
-
-    // Get user's votes
     const userVotes = await Vote.find({ user: session.user.id })
+    
+    // Calculate what the points should be based on actual activities
+    const calculatedPoints = (userIssues.length * 10) + (userVotes.length * 5)
+    
+    // Calculate badges based on activities
+    const badges = []
+    if (userIssues.length >= 1) {
+      badges.push('First Issue')
+    }
+    if (userIssues.length >= 5) {
+      badges.push('Issue Hunter')
+    }
+    if (userVotes.length >= 10) {
+      badges.push('Community Helper')
+    }
+    if (userVotes.length >= 25) {
+      badges.push('Voting Master')
+    }
+    if (calculatedPoints >= 100) {
+      badges.push('Local Hero')
+    }
+
+    // If there's a mismatch, update the user's points and badges to match their actual contributions
+    if (user.points !== calculatedPoints || JSON.stringify(user.badges) !== JSON.stringify(badges)) {
+      await User.findByIdAndUpdate(new mongoose.Types.ObjectId(session.user.id), {
+        $set: { 
+          points: calculatedPoints,
+          badges: badges
+        }
+      })
+      user.points = calculatedPoints
+      user.badges = badges
+    }
+
+    // Use the already fetched data
+    const totalIssues = userIssues.length
     const totalVotes = userVotes.length
 
     // Get resolved issues (for now, we'll use a simple count)
