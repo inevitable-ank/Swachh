@@ -46,6 +46,12 @@ export async function GET() {
     if (calculatedPoints >= 100) {
       badges.push('Local Hero')
     }
+    
+    // Check for Resolution Champion badge (3+ resolved issues)
+    const resolvedIssues = userIssues.filter(issue => issue.status === "Resolved").length
+    if (resolvedIssues >= 3) {
+      badges.push('Resolution Champion')
+    }
 
     // If there's a mismatch, update the user's points and badges to match their actual contributions
     if (user.points !== calculatedPoints || JSON.stringify(user.badges) !== JSON.stringify(badges)) {
