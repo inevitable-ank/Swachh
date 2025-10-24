@@ -72,7 +72,7 @@ export function LocationPickerMap({
   return (
     <div className="h-64 w-full rounded-md overflow-hidden">
       <MapContainer
-        center={[lat || 22.7196, lng || 75.8577]}
+        center={[lat || 28.6139, lng || 77.2090]}
         zoom={13}
         className="h-full w-full"
         scrollWheelZoom

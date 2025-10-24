@@ -42,7 +42,7 @@ export default function DynamicMap({ issues, selectedId, onSelect }: DynamicMapP
     }, []);
     if (!hasMounted) return null;
 
-    const center: LatLngExpression = [22.7196, 75.8577];
+    const center: LatLngExpression = [28.6139, 77.2090];
     const selectedIssue = issues.find((issue) => issue.id === selectedId);
 
     return (
