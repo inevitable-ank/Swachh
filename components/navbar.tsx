@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useAuth } from "@/hooks/use-auth"
-import { BarChart2, LogOut, Map, Menu, Plus, ShieldCheck, User } from "lucide-react"
+import { BarChart2, LogOut, Map, Menu, Plus, ShieldCheck, User, Star, Trophy, Award } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
@@ -38,6 +38,11 @@ export default function Navbar() {
       href: "/analytics",
       label: "Analytics",
       active: pathname === "/analytics",
+    },
+    {
+      href: "/leaderboard",
+      label: "Leaderboard",
+      active: pathname === "/leaderboard",
     },
   ]
 
@@ -105,6 +110,13 @@ export default function Navbar() {
                     </Button>
                   </Link>
                 ))}
+                {/* User Points Display */}
+                <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border border-yellow-200 dark:border-yellow-800">
+                  <Star className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
+                  <span className="text-sm font-semibold text-yellow-700 dark:text-yellow-300">
+                    {user.points || 0} pts
+                  </span>
+                </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
@@ -120,8 +132,18 @@ export default function Navbar() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuLabel className="flex items-center gap-2">
+                      <div className="flex items-center gap-2">
+                        <Star className="h-4 w-4 text-yellow-600" />
+                        <span>{user.points || 0} points</span>
+                      </div>
+                    </DropdownMenuLabel>
                     <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/profile" className="cursor-pointer">
+                        <User className="mr-2 h-4 w-4" /> My Profile
+                      </Link>
+                    </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link href="/my-issues" className="cursor-pointer">
                         <User className="mr-2 h-4 w-4" /> My Issues
@@ -130,6 +152,11 @@ export default function Navbar() {
                     <DropdownMenuItem asChild>
                       <Link href="/analytics" className="cursor-pointer">
                         <BarChart2 className="mr-2 h-4 w-4" /> Analytics
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/leaderboard" className="cursor-pointer">
+                        <Trophy className="mr-2 h-4 w-4" /> Leaderboard
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
