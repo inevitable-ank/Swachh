@@ -15,8 +15,7 @@ import {
   Award,
   TrendingUp,
   Users,
-  CheckCircle,
-  RefreshCw
+  CheckCircle
 } from "lucide-react"
 import { motion } from "framer-motion"
 
@@ -72,8 +71,6 @@ export default function ProfilePage() {
   const { user } = useAuth()
   const [stats, setStats] = useState<UserStats | null>(null)
   const [loading, setLoading] = useState(true)
-  const [showRefreshHint, setShowRefreshHint] = useState(false)
-  const [migrating, setMigrating] = useState(false)
 
   useEffect(() => {
     fetchUserStats()
@@ -86,11 +83,6 @@ export default function ProfilePage() {
       if (!response.ok) throw new Error("Failed to fetch stats")
       const data = await response.json()
       setStats(data)
-      
-      // Check if there's a mismatch between session points and actual points
-      if (user?.points !== data.points) {
-        setShowRefreshHint(true)
-      }
     } catch (error) {
       console.error("Error fetching user stats:", error)
     } finally {
@@ -98,21 +90,6 @@ export default function ProfilePage() {
     }
   }
 
-  const migrateUser = async () => {
-    setMigrating(true)
-    try {
-      const response = await fetch("/api/migrate-user", { method: "POST" })
-      if (!response.ok) throw new Error("Migration failed")
-      const data = await response.json()
-      
-      // Refresh the page to show updated points
-      window.location.reload()
-    } catch (error) {
-      console.error("Migration error:", error)
-    } finally {
-      setMigrating(false)
-    }
-  }
 
   if (loading) {
     return (
@@ -154,60 +131,6 @@ export default function ProfilePage() {
         </p>
       </motion.div>
 
-      {/* Migration Hint */}
-      {(user?.points === 0 || user?.points === undefined) && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-6"
-        >
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-full bg-yellow-100 dark:bg-yellow-900/30">
-              <Star className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-yellow-800 dark:text-yellow-200">Migrate Your Points!</h3>
-              <p className="text-sm text-yellow-700 dark:text-yellow-300">
-                We've added a points system! Click below to calculate your points from existing activities.
-              </p>
-            </div>
-            <button
-              onClick={migrateUser}
-              disabled={migrating}
-              className="ml-auto px-4 py-2 bg-yellow-600 text-white text-sm rounded hover:bg-yellow-700 transition-colors disabled:opacity-50"
-            >
-              {migrating ? "Migrating..." : "Migrate Points"}
-            </button>
-          </div>
-        </motion.div>
-      )}
-
-      {/* Refresh Hint */}
-      {showRefreshHint && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6"
-        >
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-full bg-blue-100 dark:bg-blue-900/30">
-              <RefreshCw className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-blue-800 dark:text-blue-200">Points Updated!</h3>
-              <p className="text-sm text-blue-700 dark:text-blue-300">
-                Your points have been updated. Please refresh the page to see your latest score.
-              </p>
-            </div>
-            <button
-              onClick={() => window.location.reload()}
-              className="ml-auto px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
-            >
-              Refresh
-            </button>
-          </div>
-        </motion.div>
-      )}
 
       {/* User Info Card */}
       <motion.div

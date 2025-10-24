@@ -157,11 +157,9 @@ export async function POST(request: Request) {
     await Issue.populate(issue, { path: "createdBy", select: "name email" });
 
     // Award points for creating an issue
-    console.log("Awarding points to user:", session.user.id);
     const updatedUser = await User.findByIdAndUpdate(new mongoose.Types.ObjectId(session.user.id), {
       $inc: { points: 10 }
     }, { new: true });
-    console.log("Updated user points:", updatedUser?.points);
 
     // Check for "First Issue" badge
     const userIssues = await Issue.countDocuments({ createdBy: session.user.id });

@@ -17,9 +17,7 @@ export async function GET() {
     }
 
     // Get user with points and badges
-    console.log("Fetching user stats for:", session.user.id);
     const user = await User.findById(new mongoose.Types.ObjectId(session.user.id)).select("points badges")
-    console.log("User found:", user);
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
@@ -54,15 +52,6 @@ export async function GET() {
     // Calculate rank (simplified - would need more complex query for real ranking)
     const allUsers = await User.find().select("points").sort({ points: -1 })
     const rank = allUsers.findIndex(u => u._id.toString() === session.user.id) + 1
-
-    console.log("Returning stats:", {
-      totalIssues,
-      totalVotes,
-      points: user.points,
-      badges: user.badges,
-      rank,
-      issuesResolved
-    });
 
     return NextResponse.json({
       totalIssues,
