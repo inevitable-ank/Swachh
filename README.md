@@ -25,6 +25,8 @@
 - 🗳️ **Community Voting System** - Vote on issues to prioritize community needs
 - 🗺️ **Geographic Visualization** - View all issues on an interactive map
 - 📊 **Analytics Dashboard** - Track trends and community engagement
+- 🏆 **Gamification System** - Points, badges, and leaderboard for community engagement
+- 👤 **User Profile & Stats** - Track personal contributions and achievements
 - 🔐 **Secure Authentication** - User accounts with role-based access
 - 📱 **Responsive Design** - Works seamlessly on all devices
 - 🌙 **Dark/Light Theme** - User preference support
@@ -40,6 +42,10 @@
 - **shadcn/ui** - Accessible component library
 - **React Hook Form** - Form management
 - **Zod** - Schema validation
+- **Framer Motion** - Animations and transitions
+- **React Leaflet** - Interactive mapping components
+- **Recharts** - Data visualization and charts
+- **Tremor React** - Advanced analytics components
 
 ### **Backend**
 - **Next.js API Routes** - Serverless API endpoints
@@ -47,12 +53,13 @@
 - **Mongoose** - MongoDB ODM
 - **NextAuth.js** - Authentication system
 - **bcryptjs** - Password hashing
+- **Upstash Redis** - Rate limiting and caching
 
 ### **External Services**
 - **Cloudinary** - Image upload and management
-- **Upstash Redis** - Rate limiting and caching
 - **Leaflet** - Interactive mapping
 - **OpenStreetMap** - Map tiles and geocoding
+- **Sonner** - Toast notifications
 
 ---
 
@@ -150,6 +157,50 @@
 - **Issue History** - Track all reported issues
 - **Edit/Delete** - Manage pending issues
 
+### 🏆 **Gamification System**
+- **Points System** - Earn points for reporting issues (10 points) and voting (5 points)
+- **Achievement Badges** - Unlock badges for community contributions
+  - 🎯 **First Issue** - Report your first issue
+  - 🏹 **Issue Hunter** - Report 5+ issues
+  - 🤝 **Community Helper** - Vote on 10+ issues
+  - 🗳️ **Voting Master** - Vote on 25+ issues
+  - 🦸 **Local Hero** - Reach 100+ points
+  - 🏆 **Resolution Champion** - Have 3+ issues resolved
+- **Leaderboard** - Compete with other community members
+- **User Statistics** - Track personal contributions and achievements
+- **Rank System** - See your position in the community
+
+---
+
+## 🎮 **Gamification Features**
+
+### **Points System**
+Users earn points for community engagement:
+- **10 points** for reporting a new issue
+- **5 points** for voting on an issue
+- Points are automatically calculated and updated in real-time
+
+### **Achievement Badges**
+Unlock badges by reaching milestones:
+- 🎯 **First Issue** - Report your first civic issue
+- 🏹 **Issue Hunter** - Report 5 or more issues
+- 🤝 **Community Helper** - Vote on 10 or more issues
+- 🗳️ **Voting Master** - Vote on 25 or more issues
+- 🦸 **Local Hero** - Accumulate 100+ points
+- 🏆 **Resolution Champion** - Have 3+ issues marked as resolved
+
+### **Leaderboard System**
+- **Community Rankings** - See how you compare with other users
+- **Top Contributors** - Highlight the most active community members
+- **Personal Stats** - Track your own contributions and achievements
+- **Real-time Updates** - Rankings update as users earn points
+
+### **User Statistics Dashboard**
+- **Personal Dashboard** - View your points, badges, and rank
+- **Activity History** - Track your recent contributions
+- **Achievement Progress** - See progress toward next badges
+- **Community Impact** - View your total issues reported and votes cast
+
 ---
 
 ## 🏗️ **Project Structure**
@@ -159,30 +210,60 @@ Swachhta/
 ├── app/                    # Next.js App Router
 │   ├── api/               # API routes
 │   │   ├── auth/          # Authentication endpoints
+│   │   │   ├── [...nextauth]/ # NextAuth handlers
+│   │   │   ├── login/     # Login endpoint
+│   │   │   └── register/  # Registration endpoint
 │   │   ├── issues/        # Issue management
+│   │   │   ├── [id]/      # Individual issue operations
+│   │   │   │   └── vote/ # Voting endpoints
+│   │   │   └── user/     # User's issues
 │   │   ├── analytics/     # Analytics data
-│   │   └── map/           # Map data
+│   │   ├── map/           # Map data
+│   │   ├── leaderboard/   # Leaderboard data
+│   │   ├── user/          # User management
+│   │   │   ├── stats/     # User statistics
+│   │   │   └── refresh/   # Session refresh
+│   │   └── migrate-user/  # User migration
 │   ├── auth/              # Authentication pages
+│   │   ├── login/         # Login page
+│   │   └── register/      # Registration page
 │   ├── issues/            # Issue pages
+│   │   ├── [id]/          # Individual issue view
+│   │   ├── edit/[id]/     # Issue editing
+│   │   ├── new/           # New issue creation
+│   │   └── page.tsx       # Issues listing
 │   ├── map/               # Map visualization
 │   ├── analytics/         # Analytics dashboard
+│   ├── leaderboard/       # Community leaderboard
+│   ├── profile/           # User profile
 │   └── my-issues/         # User's issues
 ├── components/            # Reusable components
 │   ├── ui/               # shadcn/ui components
 │   ├── charts.tsx        # Custom chart components
+│   ├── modern-charts.tsx # Advanced chart components
 │   ├── dynamicMap.tsx    # Interactive map
-│   └── navbar.tsx        # Navigation
+│   ├── LocationPickerMap.tsx # Location selection
+│   ├── navbar.tsx        # Navigation
+│   ├── auth-provider.tsx # Authentication context
+│   └── theme-provider.tsx # Theme context
 ├── lib/                  # Utility libraries
 │   ├── auth.ts           # Authentication config
 │   ├── db.ts             # Database connection
 │   ├── redis.ts          # Redis client
+│   ├── rate-limit.ts     # Rate limiting
+│   ├── session-utils.ts  # Session utilities
+│   ├── fixLeafletIcon.ts # Map icon fixes
 │   └── utils.ts          # Helper functions
 ├── models/               # Database models
 │   ├── Issue.ts          # Issue schema
 │   ├── User.ts           # User schema
 │   └── Vote.ts           # Vote schema
-└── hooks/                # Custom React hooks
-    └── use-auth.ts       # Authentication hook
+├── hooks/                # Custom React hooks
+│   ├── use-auth.ts       # Authentication hook
+│   ├── use-mobile.tsx    # Mobile detection
+│   └── use-toast.ts      # Toast notifications
+└── scripts/              # Utility scripts
+    └── migrate-users.js  # User migration script
 ```
 
 ---
@@ -209,6 +290,12 @@ Swachhta/
 ### **Utilities**
 - `GET /api/map` - Get issues with coordinates
 - `GET /api/analytics` - Get analytics data
+
+### **Gamification & User Stats**
+- `GET /api/leaderboard` - Get community leaderboard with rankings
+- `GET /api/user/stats` - Get user statistics and achievements
+- `POST /api/migrate-user` - Migrate user data for points system
+- `GET /api/user/refresh` - Refresh user session data
 
 ---
 
